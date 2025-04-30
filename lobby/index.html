@@ -119,7 +119,7 @@
         .user-avatar:hover {
             transform: scale(1.1);
         }
-        .admin-btn {
+        .admin-btn, .admin-nav-btn {
             background: #88b7b5;
             color: #fff;
             border: none;
@@ -128,7 +128,7 @@
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .admin-btn:hover {
+        .admin-btn:hover, .admin-nav-btn:hover {
             background: #6b5b95;
             transform: translateY(-2px);
         }
@@ -259,11 +259,11 @@
         .chat-users, .chat-groups, .live-users {
             margin-bottom: 1rem;
         }
-        .user-list, .group-list, .live-user-list {
+        .user-list, .group-list, .live-user-list, .extension-list {
             list-style: none;
             padding: 0;
         }
-        .user-list li, .group-list li, .live-user-list li {
+        .user-list li, .group-list li, .live-user-list li, .extension-list li {
             padding: 0.5rem 1rem;
             margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.05);
@@ -271,13 +271,12 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .light-mode .user-list li, .light-mode .group-list li, .light-mode .live-user-list li {
+        .light-mode .user-list li, .light-mode .group-list li, .light-mode .live-user-list li, .light-mode .extension-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .user-list li:hover, .group-list li:hover, .live-user-list li:hover {
+        .user-list li:hover, .group-list li:hover, .live-user-list li:hover, .extension-list li:hover {
             background: rgba(107, 91, 149, 0.3);
             transform: translateX(5px);
         }
@@ -292,7 +291,7 @@
             content: '⚪';
             margin-left: 0.5rem;
         }
-        .rename-btn {
+        .rename-btn, .disable-btn, .uninstall-btn {
             background: #88b7b5;
             border: none;
             padding: 0.3rem 0.6rem;
@@ -301,9 +300,15 @@
             color: #fff;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .rename-btn:hover {
+        .rename-btn:hover, .disable-btn:hover, .uninstall-btn:hover {
             background: #6b5b95;
             transform: scale(1.05);
+        }
+        .disable-btn.enabled {
+            background: #ff4d4d;
+        }
+        .disable-btn.enabled:hover {
+            background: #ff6666;
         }
         .chat-box {
             display: flex;
@@ -597,7 +602,7 @@
             z-index: 1000;
         }
         .modal-content {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 193, 0.1);
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
@@ -721,19 +726,14 @@
             <button id="chatBtn" class="active">Chat</button>
             <button id="aiBotBtn">AI Bot & Leaderboard</button>
             <button id="settingsBtn">Settings</button>
+            <button id="chromeManagementBtn">Chrome Management</button>
         </div>
         <div class="user-controls">
             <div class="user-info">
                 <div class="user-avatar" id="userInitial"></div>
                 <span id="welcomeUser"></span>
             </div>
-            <div class="admin-dropdown">
-                <button id="adminBtn" class="admin-btn" style="display: none;">Admin</button>
-                <div class="admin-menu" id="adminMenu">
-                    <button onclick="goToAdminPanel()">Admin Panel</button>
-                    <button onclick="viewStats()">View Stats</button>
-                </div>
-            </div>
+            <button id="adminNavBtn" class="admin-nav-btn" style="display: none;">Admin</button>
             <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
             <div class="theme-toggle">
                 <label>Light Mode</label>
@@ -760,24 +760,17 @@
                 users.push(user);
                 localStorage.setItem('users', JSON.stringify(users));
             }
-            document.getElementById('welcomeUser').textContent = `Welcome, ${user}${user === 'realalex' ? ' (Owner)' : ''}!`;
+            document.getElementById('welcomeUser').textContent = `Welcome, ${user}!`;
             document.getElementById('userInitial').textContent = user.charAt(0).toUpperCase();
-            const adminBtn = document.getElementById('adminBtn');
-            const adminMenu = document.getElementById('adminMenu');
+            const adminNavBtn = document.getElementById('adminNavBtn');
             const admins = JSON.parse(localStorage.getItem('admins')) || [];
             const mods = JSON.parse(localStorage.getItem('mods')) || [];
             if (admins.includes(user) || mods.includes(user)) {
-                adminBtn.style.display = 'inline-block';
-                adminBtn.addEventListener('click', () => {
-                    adminMenu.classList.toggle('active');
+                adminNavBtn.style.display = 'inline-block';
+                adminNavBtn.addEventListener('click', () => {
+                    window.location.href = '/admin';
                 });
             }
-            window.goToAdminPanel = () => {
-                window.location.href = '/admin';
-            };
-            window.viewStats = () => {
-                alert('User Stats: Under Development');
-            };
             window.signOut = () => {
                 localStorage.removeItem('username');
                 localStorage.removeItem('password');
@@ -929,7 +922,7 @@
                     li.className = activeUsers[u].online ? 'online' : 'offline';
                     li.innerHTML = `
                         <div class="user-avatar">${u.charAt(0).toUpperCase()}</div>
-                        ${u}${u === 'realalex' ? ' (Owner)' : ''}
+                        ${u}
                     `;
                     liveUserList.appendChild(li);
                 });
@@ -1133,7 +1126,7 @@
                 sortedByMessages.forEach(u => {
                     const li = document.createElement('li');
                     li.innerHTML = `
-                        <span>${u}${u === 'realalex' ? ' (Owner)' : ''}</span>
+                        <span>${u}</span>
                         <span>${messageCount[u] || 0} messages</span>
                     `;
                     messageList.appendChild(li);
@@ -1147,7 +1140,7 @@
                     const minutes = Math.floor((seconds % 3600) / 60);
                     const secs = seconds % 60;
                     li.innerHTML = `
-                        <span>${u}${u === 'realalex' ? ' (Owner)' : ''}</span>
+                        <span>${u}</span>
                         <span>${hours}h ${minutes}m ${secs}s</span>
                     `;
                     timeList.appendChild(li);
@@ -1426,6 +1419,62 @@
                     </div>
                 `;
             }
+            function renderChromeManagement() {
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Chrome Management</h2>
+                        <p>Manage your Chrome extensions below.</p>
+                        <div id="extensionList"></div>
+                    </div>
+                `;
+                const extensionList = document.getElementById('extensionList');
+                if (typeof chrome !== 'undefined' && chrome.management) {
+                    chrome.management.getAll(extensions => {
+                        const ul = document.createElement('ul');
+                        ul.className = 'extension-list';
+                        extensions.forEach(ext => {
+                            if (ext.type === 'extension') {
+                                const li = document.createElement('li');
+                                li.innerHTML = `
+                                    <span>${ext.name} (v${ext.version})</span>
+                                    <div>
+                                        <button class="disable-btn ${ext.enabled ? 'enabled' : ''}" onclick="toggleExtension('${ext.id}', ${ext.enabled})">
+                                            ${ext.enabled ? 'Disable' : 'Enable'}
+                                        </button>
+                                        <button class="uninstall-btn" onclick="uninstallExtension('${ext.id}')">Uninstall</button>
+                                    </div>
+                                `;
+                                ul.appendChild(li);
+                            }
+                        });
+                        extensionList.appendChild(ul);
+                        if (!extensions.some(ext => ext.type === 'extension')) {
+                            extensionList.innerHTML = '<p>No extensions found.</p>';
+                        }
+                    });
+                } else {
+                    extensionList.innerHTML = '<p>Chrome extension management is not available. Please ensure you are running this in a Chrome browser with appropriate permissions.</p>';
+                }
+            }
+            window.toggleExtension = function(id, isEnabled) {
+                if (chrome.management) {
+                    chrome.management.setEnabled(id, !isEnabled, () => {
+                        renderChromeManagement();
+                        notifyUser(user, `Extension ${isEnabled ? 'disabled' : 'enabled'} successfully!`);
+                    });
+                }
+            };
+            window.uninstallExtension = function(id) {
+                if (chrome.management) {
+                    const confirmUninstall = confirm('Are you sure you want to uninstall this extension?');
+                    if (confirmUninstall) {
+                        chrome.management.uninstall(id, { showConfirmDialog: false }, () => {
+                            renderChromeManagement();
+                            notifyUser(user, 'Extension uninstalled successfully!');
+                        });
+                    }
+                }
+            };
             window.saveApiKey = function() {
                 const apiKey = document.getElementById('apiKeyInput').value.trim();
                 if (apiKey) {
@@ -1451,6 +1500,8 @@
                         renderAIBotAndLeaderboard();
                     } else if (btn.id === 'settingsBtn') {
                         renderSettings();
+                    } else if (btn.id === 'chromeManagementBtn') {
+                        renderChromeManagement();
                     }
                 });
             });
