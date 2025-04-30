@@ -156,6 +156,58 @@
         .global-code-form button:hover {
             background: #88b7b5;
         }
+        .admin-code-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .light-mode .modal-content {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .modal-content h2 {
+            color: #6b5b95;
+            margin-bottom: 1rem;
+        }
+        .modal-content input {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .modal-content button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 0.5rem;
+        }
+        .submit-btn {
+            background: #6b5b95;
+            color: #fff;
+        }
+        .submit-btn:hover {
+            background: #88b7b5;
+        }
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -185,7 +237,14 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="admin-code-modal" id="adminCodeModal">
+        <div class="modal-content">
+            <h2>Enter Admin Code</h2>
+            <input type="password" id="adminCodeInput" placeholder="Admin Code">
+            <button class="submit-btn" onclick="verifyAdminCode()">Submit</button>
+        </div>
+    </div>
+    <div class="container" id="adminContent" style="display: none;">
         <header>
             <div class="logo">
                 <div class="logo-icon"></div>
@@ -214,6 +273,25 @@
                 window.location.href = '/lobby';
                 return;
             }
+            const adminCode = "admindev$";
+            const adminAuthenticated = localStorage.getItem('adminAuthenticated');
+            if (adminAuthenticated !== 'true') {
+                document.getElementById('adminCodeModal').style.display = 'flex';
+            } else {
+                document.getElementById('adminContent').style.display = 'block';
+                renderUsers();
+            }
+            window.verifyAdminCode = function() {
+                const inputCode = document.getElementById('adminCodeInput').value;
+                if (inputCode === adminCode) {
+                    localStorage.setItem('adminAuthenticated', 'true');
+                    document.getElementById('adminCodeModal').style.display = 'none';
+                    document.getElementById('adminContent').style.display = 'block';
+                    renderUsers();
+                } else {
+                    alert('Invalid admin code.');
+                }
+            };
             let users = JSON.parse(localStorage.getItem('users')) || [];
             let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
             function renderUsers() {
@@ -281,7 +359,6 @@
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
             }
-            renderUsers();
             window.addEventListener('storage', (event) => {
                 if (event.key === 'users' || event.key === 'bannedUsers' || event.key === 'mods') {
                     users = JSON.parse(localStorage.getItem('users')) || [];
