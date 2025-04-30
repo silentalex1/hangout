@@ -25,13 +25,14 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
         .logo {
             display: flex;
@@ -56,7 +57,7 @@
             color: #2e2a47;
         }
         header h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #6b5b95;
         }
         .light-mode header h1 {
@@ -77,7 +78,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 15px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         .light-mode .section {
             background: rgba(0, 0, 0, 0.05);
@@ -102,11 +103,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         .light-mode .user-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .ban-btn {
+        .ban-btn, .change-password-btn {
             background: #ff4d4d;
             color: #fff;
             border: none;
@@ -114,8 +117,37 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        .ban-btn:hover {
+        .ban-btn:hover, .change-password-btn:hover {
             background: #ff6666;
+        }
+        .change-password-btn {
+            background: #6b5b95;
+        }
+        .change-password-btn:hover {
+            background: #88b7b5;
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .user-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            .ban-btn, .change-password-btn {
+                font-size: 0.9rem;
+                padding: 0.3rem 0.6rem;
+            }
         }
     </style>
 </head>
@@ -152,7 +184,10 @@
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <span>${u}</span>
-                        <button class="ban-btn" onclick="banUser('${u}')">${bannedUsers.includes(u) ? 'Unban' : 'Ban'}</button>
+                        <div>
+                            <button class="ban-btn" onclick="banUser('${u}')">${bannedUsers.includes(u) ? 'Unban' : 'Ban'}</button>
+                            <button class="change-password-btn" onclick="changePassword('${u}')">Change Password</button>
+                        </div>
                     `;
                     fragment.appendChild(li);
                 });
@@ -166,6 +201,13 @@
                 }
                 localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
                 renderUsers();
+            };
+            window.changePassword = function(username) {
+                const newPassword = prompt(`Enter new password for ${username}:`);
+                if (newPassword && newPassword.trim()) {
+                    localStorage.setItem(`${username}_password`, newPassword.trim());
+                    alert(`Password for ${username} updated successfully!`);
+                }
             };
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
