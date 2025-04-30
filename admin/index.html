@@ -79,6 +79,7 @@
             padding: 1.5rem;
             border-radius: 15px;
             margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
         }
         .light-mode .section {
             background: rgba(0, 0, 0, 0.05);
@@ -109,7 +110,7 @@
         .light-mode .user-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .ban-btn, .change-password-btn {
+        .ban-btn, .change-password-btn, .change-code-btn {
             background: #ff4d4d;
             color: #fff;
             border: none;
@@ -117,13 +118,13 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        .ban-btn:hover, .change-password-btn:hover {
+        .ban-btn:hover, .change-password-btn:hover, .change-code-btn:hover {
             background: #ff6666;
         }
-        .change-password-btn {
+        .change-password-btn, .change-code-btn {
             background: #6b5b95;
         }
-        .change-password-btn:hover {
+        .change-password-btn:hover, .change-code-btn:hover {
             background: #88b7b5;
         }
         @media (max-width: 768px) {
@@ -144,7 +145,7 @@
             .section h2 {
                 font-size: 1.5rem;
             }
-            .ban-btn, .change-password-btn {
+            .ban-btn, .change-password-btn, .change-code-btn {
                 font-size: 0.9rem;
                 padding: 0.3rem 0.6rem;
             }
@@ -168,7 +169,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('username');
-            const admins = JSON.parse(localStorage.getItem('admins')) || [String.fromCharCode(114, 101, 97, 108, 97, 108, 101, 120)];
+            const admins = JSON.parse(localStorage.getItem('admins')) || [];
             if (!user || !admins.includes(user)) {
                 window.location.href = '/lobby';
                 return;
@@ -187,6 +188,7 @@
                         <div>
                             <button class="ban-btn" onclick="banUser('${u}')">${bannedUsers.includes(u) ? 'Unban' : 'Ban'}</button>
                             <button class="change-password-btn" onclick="changePassword('${u}')">Change Password</button>
+                            <button class="change-code-btn" onclick="changeCode('${u}')">Change Code</button>
                         </div>
                     `;
                     fragment.appendChild(li);
@@ -207,6 +209,13 @@
                 if (newPassword && newPassword.trim()) {
                     localStorage.setItem(`${username}_password`, newPassword.trim());
                     alert(`Password for ${username} updated successfully!`);
+                }
+            };
+            window.changeCode = function(username) {
+                const newCode = prompt(`Enter new code for ${username}:`);
+                if (newCode && newCode.trim()) {
+                    localStorage.setItem(`${username}_code`, newCode.trim());
+                    alert(`Code for ${username} updated successfully!`);
                 }
             };
             if (localStorage.getItem('theme') === 'light') {
