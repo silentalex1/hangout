@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chatting Hangout Login">
+    <meta name="description" content="the best chatting website hangout for school">
     <title>Chatting Hangout - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -34,6 +34,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            backdrop-filter: blur(5px);
         }
         .light-mode .container {
             background: rgba(0, 0, 0, 0.05);
@@ -83,10 +84,14 @@
             color: #e0e0e0;
             font-size: 1rem;
             outline: none;
+            transition: background 0.2s ease;
         }
         .light-mode .login-form input {
             background: rgba(0, 0, 0, 0.1);
             color: #2e2a47;
+        }
+        .login-form input:focus {
+            background: rgba(255, 255, 255, 0.2);
         }
         .login-form button {
             background: linear-gradient(135deg, #6b5b95, #88b7b5);
