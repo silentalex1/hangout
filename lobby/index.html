@@ -1125,8 +1125,7 @@
                     }
                 }
             }
-            function renderAIBotAndLeaderboard() {
-                const apiKey = localStorage.getItem('openai_api_key');
+            function updateLeaderboard() {
                 const sortedByMessages = users.sort((a, b) => (messageCount[b] || 0) - (messageCount[a] || 0));
                 const sortedByTime = users.sort((a, b) => (timeSpent[b] || 0) - (timeSpent[a] || 0));
                 const messageList = document.createElement('ul');
@@ -1153,6 +1152,15 @@
                     `;
                     timeList.appendChild(li);
                 });
+                const leaderboardMessages = content.querySelector('.leaderboard-messages');
+                const leaderboardTime = content.querySelector('.leaderboard-time');
+                if (leaderboardMessages) leaderboardMessages.innerHTML = '';
+                if (leaderboardTime) leaderboardTime.innerHTML = '';
+                if (leaderboardMessages) leaderboardMessages.appendChild(messageList);
+                if (leaderboardTime) leaderboardTime.appendChild(timeList);
+            }
+            function renderAIBotAndLeaderboard() {
+                const apiKey = localStorage.getItem('openai_api_key');
                 content.innerHTML = `
                     <div class="section">
                         <h2>AI Bot & Leaderboard</h2>
@@ -1179,8 +1187,6 @@
                         </div>
                     </div>
                 `;
-                content.querySelector('.leaderboard-messages').appendChild(messageList);
-                content.querySelector('.leaderboard-time').appendChild(timeList);
                 const aiMessages = document.getElementById('aiMessages');
                 aiChatHistory.forEach(msg => {
                     const div = document.createElement('div');
@@ -1229,9 +1235,10 @@
                     aiMessages.appendChild(div);
                 });
                 aiMessages.scrollTop = aiMessages.scrollHeight;
+                updateLeaderboard();
                 setInterval(() => {
                     if (document.querySelector('.nav-links button.active').id === 'aiBotBtn') {
-                        renderAIBotAndLeaderboard();
+                        updateLeaderboard();
                     }
                 }, 1000);
             }
@@ -1462,7 +1469,7 @@
                     users = JSON.parse(localStorage.getItem('users')) || [];
                     renderChat();
                     if (document.querySelector('.nav-links button.active').id === 'aiBotBtn') {
-                        renderAIBotAndLeaderboard();
+                        updateLeaderboard();
                     }
                 } else if (event.key === 'messages' || event.key === 'groups') {
                     messages = JSON.parse(localStorage.getItem('messages')) || {};
@@ -1474,7 +1481,7 @@
                     messageCount = JSON.parse(localStorage.getItem('messageCount')) || {};
                     timeSpent = JSON.parse(localStorage.getItem('timeSpent')) || {};
                     if (document.querySelector('.nav-links button.active').id === 'aiBotBtn') {
-                        renderAIBotAndLeaderboard();
+                        updateLeaderboard();
                     }
                 } else if (event.key === 'activeUsers') {
                     activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || {};
