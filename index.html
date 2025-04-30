@@ -191,18 +191,28 @@
             const code = document.getElementById('code').value.trim();
             const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
             const storedCode = localStorage.getItem(`${username}_code`);
+            const globalCode = localStorage.getItem('globalWebsiteCode') || '';
             if (bannedUsers.includes(username)) {
                 alert('You are banned from Chatting Hangout.');
                 return;
             }
             if (username && password && code) {
                 if (storedCode && storedCode !== code) {
-                    alert('Invalid code. Please try again.');
+                    alert('Invalid user code. Please try again.');
+                    return;
+                }
+                if (globalCode && globalCode !== code) {
+                    alert('Invalid global website code. Please try again.');
                     return;
                 }
                 localStorage.setItem('username', username);
                 localStorage.setItem('password', password);
                 localStorage.setItem(`${username}_code`, code);
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                if (!users.includes(username)) {
+                    users.push(username);
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
                 window.location.href = '/lobby';
             } else {
                 alert('Please enter a username, password, and code.');
