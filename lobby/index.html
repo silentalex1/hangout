@@ -29,6 +29,7 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            flex-wrap: wrap;
         }
         .light-mode .navbar {
             background: rgba(0, 0, 0, 0.05);
@@ -64,7 +65,8 @@
         }
         .nav-links {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         .nav-links button {
             background: #6b5b95;
@@ -85,7 +87,8 @@
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
         .user-info {
             display: flex;
@@ -125,6 +128,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             z-index: 10;
+            min-width: 150px;
         }
         .light-mode .admin-menu {
             background: rgba(0, 0, 0, 0.1);
@@ -192,7 +196,7 @@
             left: 22px;
         }
         .content {
-            padding: 2rem;
+            padding: 1rem;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -200,7 +204,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 15px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         .light-mode .section {
             background: rgba(0, 0, 0, 0.05);
@@ -213,14 +217,27 @@
         .light-mode .section h2 {
             color: #4a5e6d;
         }
-        .chat-users {
+        .chat-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .chat-sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+        .chat-area {
+            flex: 2;
+            min-width: 300px;
+        }
+        .chat-users, .chat-groups {
             margin-bottom: 1rem;
         }
-        .user-list {
+        .user-list, .group-list {
             list-style: none;
             padding: 0;
         }
-        .user-list li {
+        .user-list li, .group-list li {
             padding: 0.5rem 1rem;
             margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.05);
@@ -230,11 +247,22 @@
             gap: 0.5rem;
             cursor: pointer;
         }
-        .light-mode .user-list li {
+        .light-mode .user-list li, .light-mode .group-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .user-list li.active {
+        .user-list li.active, .group-list li.active {
             background: rgba(107, 91, 149, 0.2);
+        }
+        .rename-btn {
+            background: #88b7b5;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .rename-btn:hover {
+            background: #6b5b95;
         }
         .chat-box {
             display: flex;
@@ -303,6 +331,36 @@
         .chat-input button:hover {
             background: #88b7b5;
         }
+        .add-user, .create-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .add-user input, .create-group input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+        }
+        .light-mode .add-user input, .light-mode .create-group input {
+            background: rgba(0, 0, 0, 0.1);
+            color: #2e2a47;
+        }
+        .add-user button, .create-group button {
+            background: #6b5b95;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .add-user button:hover, .create-group button:hover {
+            background: #88b7b5;
+        }
         .ai-response {
             background: rgba(136, 183, 181, 0.3);
             padding: 1rem;
@@ -320,9 +378,99 @@
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         .light-mode .leaderboard-list li {
             background: rgba(0, 0, 0, 0.05);
+        }
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .settings-form input {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+        }
+        .light-mode .settings-form input {
+            background: rgba(0, 0, 0, 0.1);
+            color: #2e2a47;
+        }
+        .settings-form button {
+            background: #6b5b95;
+            color: #fff;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .settings-form button:hover {
+            background: #88b7b5;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #6b5b95;
+            color: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+        .permission-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .light-mode .modal-content {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .modal-content h2 {
+            color: #6b5b95;
+            margin-bottom: 1rem;
+        }
+        .modal-content button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 0.5rem;
+        }
+        .grant-btn {
+            background: #6b5b95;
+            color: #fff;
+        }
+        .grant-btn:hover {
+            background: #88b7b5;
+        }
+        .deny-btn {
+            background: #ff4d4d;
+            color: #fff;
+        }
+        .deny-btn:hover {
+            background: #ff6666;
         }
         @media (max-width: 768px) {
             .navbar {
@@ -330,16 +478,47 @@
                 gap: 1rem;
             }
             .nav-links {
-                flex-wrap: wrap;
                 justify-content: center;
             }
             .user-controls {
                 flex-direction: column;
+                gap: 0.5rem;
+            }
+            .chat-container {
+                flex-direction: column;
+            }
+            .chat-sidebar, .chat-area {
+                flex: 1;
+                min-width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .navbar h1 {
+                font-size: 1.5rem;
+            }
+            .nav-links button {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            .chat-input input, .chat-input button {
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="permission-modal" id="permissionModal">
+        <div class="modal-content">
+            <h2>Notification Permission</h2>
+            <p>We need your permission to send notifications for new messages.</p>
+            <button class="grant-btn" onclick="grantNotificationPermission()">Grant</button>
+            <button class="deny-btn" onclick="denyNotificationPermission()">Deny</button>
+        </div>
+    </div>
+    <div class="notification" id="notification"></div>
     <nav class="navbar">
         <div class="logo">
             <div class="logo-icon"></div>
@@ -426,31 +605,86 @@
                 }
             });
             let messages = JSON.parse(localStorage.getItem('messages')) || {};
-            let currentChatUser = null;
-            let messageCount = users.reduce((acc, u) => {
-                acc[u] = (messages[u] || []).length;
-                return acc;
-            }, {});
+            let groups = JSON.parse(localStorage.getItem('groups')) || {};
+            let friends = JSON.parse(localStorage.getItem(`${user}_friends`)) || {};
+            let messageCount = JSON.parse(localStorage.getItem('messageCount')) || {};
+            let timeSpent = JSON.parse(localStorage.getItem('timeSpent')) || {};
+            let currentChat = null;
+            let currentChatType = null;
+            if (!messageCount[user]) messageCount[user] = 0;
+            if (!timeSpent[user]) timeSpent[user] = 0;
+            let startTime = Date.now();
+            setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                timeSpent[user] += elapsed;
+                localStorage.setItem('timeSpent', JSON.stringify(timeSpent));
+                startTime = Date.now();
+            }, 1000);
+            window.addEventListener('unload', () => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                timeSpent[user] += elapsed;
+                localStorage.setItem('timeSpent', JSON.stringify(timeSpent));
+            });
+            const permissionModal = document.getElementById('permissionModal');
+            const notificationPermission = localStorage.getItem('notificationPermission');
+            if (!notificationPermission) {
+                permissionModal.style.display = 'flex';
+            }
+            window.grantNotificationPermission = function() {
+                localStorage.setItem('notificationPermission', 'granted');
+                permissionModal.style.display = 'none';
+                Notification.requestPermission();
+            };
+            window.denyNotificationPermission = function() {
+                localStorage.setItem('notificationPermission', 'denied');
+                permissionModal.style.display = 'none';
+            };
+            function notifyUser(toUser, message) {
+                if (toUser === user && localStorage.getItem('notificationPermission') === 'granted' && Notification.permission === 'granted') {
+                    new Notification(message);
+                }
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
             function renderChat() {
-                const otherUsers = users.filter(u => u !== user);
+                const otherUsers = Object.keys(friends);
                 const fragment = document.createDocumentFragment();
                 const userList = document.createElement('ul');
                 userList.className = 'user-list';
                 otherUsers.forEach(u => {
                     const li = document.createElement('li');
-                    li.className = currentChatUser === u ? 'active' : '';
-                    li.setAttribute('onclick', `selectChatUser('${u}')`);
+                    li.className = currentChat === u && currentChatType === 'dm' ? 'active' : '';
+                    li.setAttribute('onclick', `selectChat('${u}', 'dm')`);
                     li.innerHTML = `
                         <div class="user-avatar">${u.charAt(0).toUpperCase()}</div>
-                        ${u}
+                        ${friends[u]} (${u})
                         ${messages[u] && messages[u].some(msg => msg.to === user && !msg.read) ? '<span style="color: #ff4d4d;">(New)</span>' : ''}
+                        <button class="rename-btn" onclick="event.stopPropagation(); renameFriend('${u}')">Rename</button>
                     `;
                     userList.appendChild(li);
                 });
+                const groupList = document.createElement('ul');
+                groupList.className = 'group-list';
+                Object.keys(groups).forEach(g => {
+                    const li = document.createElement('li');
+                    li.className = currentChat === g && currentChatType === 'group' ? 'active' : '';
+                    li.setAttribute('onclick', `selectChat('${g}', 'group')`);
+                    li.innerHTML = `
+                        <div class="user-avatar">G</div>
+                        ${g}
+                        ${groups[g].messages && groups[g].messages.some(msg => msg.to.includes(user) && !msg.read) ? '<span style="color: #ff4d4d;">(New)</span>' : ''}
+                    `;
+                    groupList.appendChild(li);
+                });
                 const chatMessagesDiv = document.createElement('div');
                 chatMessagesDiv.className = 'chat-messages';
-                if (currentChatUser) {
-                    (messages[currentChatUser] || []).forEach(msg => {
+                if (currentChat) {
+                    const chatData = currentChatType === 'dm' ? messages[currentChat] || [] : groups[currentChat]?.messages || [];
+                    chatData.forEach(msg => {
                         const div = document.createElement('div');
                         div.className = `message ${msg.from === user ? 'sent' : 'received'}`;
                         div.innerHTML = `
@@ -461,65 +695,137 @@
                         chatMessagesDiv.appendChild(div);
                     });
                 } else {
-                    chatMessagesDiv.innerHTML = '<p>Select a user to start chatting.</p>';
+                    chatMessagesDiv.innerHTML = '<p>Select a chat to start messaging.</p>';
                 }
                 fragment.appendChild(userList);
+                fragment.appendChild(groupList);
                 fragment.appendChild(chatMessagesDiv);
                 content.innerHTML = `
                     <div class="section">
                         <h2>Chat</h2>
-                        <div class="chat-users"></div>
-                        <div class="chat-box">
-                            <div class="chat-messages"></div>
-                            ${currentChatUser ? `
-                                <div class="chat-input">
-                                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                                    <button onclick="sendMessage()">Send</button>
+                        <div class="chat-container">
+                            <div class="chat-sidebar">
+                                <div class="add-user">
+                                    <input type="text" id="addUserInput" placeholder="Add user by username">
+                                    <button onclick="addFriend()">Add</button>
                                 </div>
-                            ` : ''}
+                                <div class="chat-users">
+                                    <h3>Friends</h3>
+                                </div>
+                                <div class="create-group">
+                                    <input type="text" id="groupNameInput" placeholder="Group name">
+                                    <button onclick="createGroup()">Create Group</button>
+                                </div>
+                                <div class="chat-groups">
+                                    <h3>Groups</h3>
+                                </div>
+                            </div>
+                            <div class="chat-area">
+                                <div class="chat-box">
+                                    <div class="chat-messages"></div>
+                                    ${currentChat ? `
+                                        <div class="chat-input">
+                                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                                            <button onclick="sendMessage()">Send</button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
                 content.querySelector('.chat-users').appendChild(userList);
+                content.querySelector('.chat-groups').appendChild(groupList);
                 content.querySelector('.chat-box').replaceChild(chatMessagesDiv, content.querySelector('.chat-messages'));
                 if (chatMessagesDiv) {
                     chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
                 }
-                if (currentChatUser) {
-                    markMessagesAsRead(currentChatUser);
+                if (currentChat) {
+                    markMessagesAsRead(currentChat, currentChatType);
                 }
             }
-            window.selectChatUser = function(username) {
-                currentChatUser = username;
+            window.addFriend = function() {
+                const username = document.getElementById('addUserInput').value.trim();
+                if (username && username !== user && users.includes(username) && !friends[username]) {
+                    friends[username] = username;
+                    localStorage.setItem(`${user}_friends`, JSON.stringify(friends));
+                    renderChat();
+                } else {
+                    alert('User not found or already added.');
+                }
+            };
+            window.renameFriend = function(username) {
+                const newName = prompt(`Rename ${username} to:`, friends[username]);
+                if (newName && newName.trim()) {
+                    friends[username] = newName.trim();
+                    localStorage.setItem(`${user}_friends`, JSON.stringify(friends));
+                    renderChat();
+                }
+            };
+            window.createGroup = function() {
+                const groupName = document.getElementById('groupNameInput').value.trim();
+                if (groupName && !groups[groupName]) {
+                    groups[groupName] = { members: [user], messages: [] };
+                    localStorage.setItem('groups', JSON.stringify(groups));
+                    renderChat();
+                } else {
+                    alert('Group name already exists or invalid.');
+                }
+            };
+            window.selectChat = function(chatId, type) {
+                currentChat = chatId;
+                currentChatType = type;
                 renderChat();
             };
             window.sendMessage = function() {
                 const input = document.getElementById('chatInput');
                 const text = input.value.trim();
-                if (text && currentChatUser) {
-                    if (!messages[currentChatUser]) {
-                        messages[currentChatUser] = [];
-                    }
+                if (text && currentChat) {
                     const timestamp = Date.now();
-                    messages[currentChatUser].push({ from: user, to: currentChatUser, text, read: false, timestamp });
-                    localStorage.setItem('messages', JSON.stringify(messages));
-                    messageCount[user] = (messageCount[user] || 0) + 1;
+                    if (currentChatType === 'dm') {
+                        if (!messages[currentChat]) messages[currentChat] = [];
+                        messages[currentChat].push({ from: user, to: currentChat, text, read: false, timestamp });
+                        localStorage.setItem('messages', JSON.stringify(messages));
+                        notifyUser(currentChat, `${user} has sent you a message!`);
+                    } else {
+                        const group = groups[currentChat];
+                        group.messages.push({ from: user, to: group.members, text, read: false, timestamp });
+                        localStorage.setItem('groups', JSON.stringify(groups));
+                        group.members.forEach(member => {
+                            if (member !== user) notifyUser(member, `${user} has sent a message in ${currentChat}!`);
+                        });
+                    }
+                    messageCount[user]++;
+                    localStorage.setItem('messageCount', JSON.stringify(messageCount));
                     input.value = '';
                     renderChat();
                 }
             };
-            function markMessagesAsRead(otherUser) {
-                if (messages[otherUser]) {
-                    messages[otherUser] = messages[otherUser].map(msg => {
-                        if (msg.to === user) {
-                            return { ...msg, read: true };
-                        }
-                        return msg;
-                    });
-                    localStorage.setItem('messages', JSON.stringify(messages));
+            function markMessagesAsRead(chatId, type) {
+                if (type === 'dm') {
+                    if (messages[chatId]) {
+                        messages[chatId] = messages[chatId].map(msg => {
+                            if (msg.to === user) {
+                                return { ...msg, read: true };
+                            }
+                            return msg;
+                        });
+                        localStorage.setItem('messages', JSON.stringify(messages));
+                    }
+                } else {
+                    if (groups[chatId]) {
+                        groups[chatId].messages = groups[chatId].messages.map(msg => {
+                            if (msg.to.includes(user)) {
+                                return { ...msg, read: true };
+                            }
+                            return msg;
+                        });
+                        localStorage.setItem('groups', JSON.stringify(groups));
+                    }
                 }
             }
             function renderAIBot() {
+                const apiKey = localStorage.getItem('openai_api_key');
                 content.innerHTML = `
                     <div class="section">
                         <h2>AI Bot</h2>
@@ -527,14 +833,16 @@
                             <div class="chat-messages" id="aiMessages">
                                 <div class="message received">
                                     <p class="username">AI Bot</p>
-                                    <p>Hello! How can I assist you today?</p>
+                                    <p>${apiKey ? 'Hello! How can I assist you today?' : 'Please set your OpenAI API key in Settings to use the AI Bot.'}</p>
                                     <p class="timestamp">${new Date().toLocaleTimeString()}</p>
                                 </div>
                             </div>
-                            <div class="chat-input">
-                                <input type="text" id="aiInput" placeholder="Ask the AI Bot..." onkeypress="if(event.key === 'Enter') sendToAIBot()">
-                                <button onclick="sendToAIBot()">Send</button>
-                            </div>
+                            ${apiKey ? `
+                                <div class="chat-input">
+                                    <input type="text" id="aiInput" placeholder="Ask the AI Bot..." onkeypress="if(event.key === 'Enter') sendToAIBot()">
+                                    <button onclick="sendToAIBot()">Send</button>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -558,7 +866,7 @@
                         responseMessage.className = 'message received ai-response';
                         responseMessage.innerHTML = `
                             <p class="username">AI Bot</p>
-                            <p>I hear you! You said: "${text}". How can I help you further?</p>
+                            <p>I hear you! You said: "${text}". How can I assist you further? (Mock response - requires real OpenAI API key)</p>
                             <p class="timestamp">${new Date().toLocaleTimeString()}</p>
                         `;
                         aiMessages.appendChild(responseMessage);
@@ -568,35 +876,70 @@
                 }
             };
             function renderSettings() {
+                const apiKey = localStorage.getItem('openai_api_key') || '';
                 content.innerHTML = `
                     <div class="section">
                         <h2>Settings</h2>
                         <p>Manage your preferences here.</p>
                         <p>Theme: Toggle light/dark mode in the navbar.</p>
+                        <div class="settings-form">
+                            <label>OpenAI API Key (for AI Bot)</label>
+                            <input type="text" id="apiKeyInput" value="${apiKey}" placeholder="Enter your OpenAI API key">
+                            <button onclick="saveApiKey()">Save</button>
+                        </div>
                     </div>
                 `;
             }
+            window.saveApiKey = function() {
+                const apiKey = document.getElementById('apiKeyInput').value.trim();
+                if (apiKey) {
+                    localStorage.setItem('openai_api_key', apiKey);
+                    alert('API Key saved successfully!');
+                } else {
+                    alert('Please enter a valid API key.');
+                }
+            };
             function renderLeaderboard() {
-                const sortedUsers = users.sort((a, b) => (messageCount[b] || 0) - (messageCount[a] || 0));
+                const sortedByMessages = users.sort((a, b) => (messageCount[b] || 0) - (messageCount[a] || 0));
+                const sortedByTime = users.sort((a, b) => (timeSpent[b] || 0) - (timeSpent[a] || 0));
                 const fragment = document.createDocumentFragment();
-                const leaderboardList = document.createElement('ul');
-                leaderboardList.className = 'leaderboard-list';
-                sortedUsers.forEach(u => {
+                const messageList = document.createElement('ul');
+                messageList.className = 'leaderboard-list';
+                sortedByMessages.forEach(u => {
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <span>${u}</span>
                         <span>${messageCount[u] || 0} messages</span>
                     `;
-                    leaderboardList.appendChild(li);
+                    messageList.appendChild(li);
                 });
-                fragment.appendChild(leaderboardList);
+                const timeList = document.createElement('ul');
+                timeList.className = 'leaderboard-list';
+                sortedByTime.forEach(u => {
+                    const li = document.createElement('li');
+                    const seconds = timeSpent[u] || 0;
+                    const hours = Math.floor(seconds / 3600);
+                    const minutes = Math.floor((seconds % 3600) / 60);
+                    const secs = seconds % 60;
+                    li.innerHTML = `
+                        <span>${u}</span>
+                        <span>${hours}h ${minutes}m ${secs}s</span>
+                    `;
+                    timeList.appendChild(li);
+                });
+                fragment.appendChild(messageList);
+                fragment.appendChild(timeList);
                 content.innerHTML = `
                     <div class="section">
                         <h2>Leaderboard</h2>
-                        <p>Top users by message count:</p>
+                        <h3>Top Users by Messages</h3>
+                    </div>
+                    <div class="section">
+                        <h3>Top Users by Time Spent</h3>
                     </div>
                 `;
-                content.querySelector('.section').appendChild(leaderboardList);
+                content.querySelector('.section:nth-child(1)').appendChild(messageList);
+                content.querySelector('.section:nth-child(2)').appendChild(timeList);
             }
             const navButtons = document.querySelectorAll('.nav-links button');
             navButtons.forEach(btn => {
@@ -624,6 +967,12 @@
                     const updatedBannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
                     if (updatedBannedUsers.includes(user)) {
                         window.location.href = '/ban';
+                    }
+                } else if (event.key === 'messages' || event.key === 'groups') {
+                    messages = JSON.parse(localStorage.getItem('messages')) || {};
+                    groups = JSON.parse(localStorage.getItem('groups')) || {};
+                    if (document.querySelector('.nav-links button.active').id === 'chatBtn') {
+                        renderChat();
                     }
                 }
             });
