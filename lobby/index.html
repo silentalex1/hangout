@@ -119,7 +119,7 @@
         .user-avatar:hover {
             transform: scale(1.1);
         }
-        .admin-btn, .admin-nav-btn {
+        .admin-nav-btn {
             background: #88b7b5;
             color: #fff;
             border: none;
@@ -128,46 +128,9 @@
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .admin-btn:hover, .admin-nav-btn:hover {
+        .admin-nav-btn:hover {
             background: #6b5b95;
             transform: translateY(-2px);
-        }
-        .admin-dropdown {
-            position: relative;
-        }
-        .admin-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            z-index: 10;
-            min-width: 150px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .light-mode .admin-menu {
-            background: rgba(0, 0, 0, 0.1);
-        }
-        .admin-menu.active {
-            display: block;
-        }
-        .admin-menu button {
-            display: block;
-            width: 100%;
-            padding: 0.5rem 1rem;
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            text-align: left;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .light-mode .admin-menu button {
-            color: #2e2a47;
-        }
-        .admin-menu button:hover {
-            background: rgba(107, 91, 149, 0.3);
         }
         .sign-out-btn {
             background: #ff4d4d;
@@ -256,14 +219,14 @@
             flex: 2;
             min-width: 300px;
         }
-        .chat-users, .chat-groups, .live-users {
+        .chat-users, .chat-groups, .live-users, .recent-activity {
             margin-bottom: 1rem;
         }
-        .user-list, .group-list, .live-user-list, .extension-list {
+        .user-list, .group-list, .live-user-list, .extension-list, .activity-list, .notification-list {
             list-style: none;
             padding: 0;
         }
-        .user-list li, .group-list li, .live-user-list li, .extension-list li {
+        .user-list li, .group-list li, .live-user-list li, .extension-list li, .activity-list li, .notification-list li {
             padding: 0.5rem 1rem;
             margin-bottom: 0.5rem;
             background: rgba(255, 255, 255, 0.05);
@@ -273,10 +236,10 @@
             gap: 0.5rem;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .light-mode .user-list li, .light-mode .group-list li, .light-mode .live-user-list li, .light-mode .extension-list li {
+        .light-mode .user-list li, .light-mode .group-list li, .light-mode .live-user-list li, .light-mode .extension-list li, .light-mode .activity-list li, .light-mode .notification-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .user-list li:hover, .group-list li:hover, .live-user-list li:hover, .extension-list li:hover {
+        .user-list li:hover, .group-list li:hover, .live-user-list li:hover, .extension-list li:hover, .activity-list li:hover, .notification-list li:hover {
             background: rgba(107, 91, 149, 0.3);
             transform: translateX(5px);
         }
@@ -291,7 +254,7 @@
             content: '⚪';
             margin-left: 0.5rem;
         }
-        .rename-btn, .disable-btn, .uninstall-btn {
+        .rename-btn, .disable-btn, .uninstall-btn, .edit-btn, .save-btn {
             background: #88b7b5;
             border: none;
             padding: 0.3rem 0.6rem;
@@ -300,7 +263,7 @@
             color: #fff;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .rename-btn:hover, .disable-btn:hover, .uninstall-btn:hover {
+        .rename-btn:hover, .disable-btn:hover, .uninstall-btn:hover, .edit-btn:hover, .save-btn:hover {
             background: #6b5b95;
             transform: scale(1.05);
         }
@@ -355,6 +318,12 @@
         .message .timestamp {
             font-size: 0.7rem;
             color: #b0b0b0;
+        }
+        .typing-indicator {
+            font-size: 0.8rem;
+            color: #88b7b5;
+            padding: 0.5rem;
+            display: none;
         }
         .chat-input {
             display: flex;
@@ -525,16 +494,16 @@
             gap: 1rem;
             flex-wrap: wrap;
         }
-        .ai-bot-section, .leaderboard-section {
+        .ai-bot-section, .leaderboard-section, .profile-section, .notifications-section {
             flex: 1;
             min-width: 300px;
         }
-        .settings-form {
+        .settings-form, .profile-form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-        .settings-form input {
+        .settings-form input, .profile-form input, .profile-form textarea {
             padding: 0.8rem;
             border: none;
             border-radius: 8px;
@@ -544,14 +513,14 @@
             outline: none;
             transition: background 0.2s ease;
         }
-        .light-mode .settings-form input {
+        .light-mode .settings-form input, .light-mode .profile-form input, .light-mode .profile-form textarea {
             background: rgba(0, 0, 0, 0.1);
             color: #2e2a47;
         }
-        .settings-form input:focus {
+        .settings-form input:focus, .profile-form input:focus, .profile-form textarea:focus {
             background: rgba(255, 255, 255, 0.2);
         }
-        .settings-form button {
+        .settings-form button, .profile-form button {
             background: #6b5b95;
             color: #fff;
             border: none;
@@ -560,7 +529,7 @@
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
         }
-        .settings-form button:hover {
+        .settings-form button:hover, .profile-form button:hover {
             background: #88b7b5;
             transform: translateY(-2px);
         }
@@ -675,7 +644,7 @@
             .chat-container, .integrated-section {
                 flex-direction: column;
             }
-            .chat-sidebar, .chat-area, .ai-bot-section, .leaderboard-section {
+            .chat-sidebar, .chat-area, .ai-bot-section, .leaderboard-section, .profile-section, .notifications-section {
                 flex: 1;
                 min-width: 100%;
             }
@@ -727,6 +696,8 @@
             <button id="aiBotBtn">AI Bot & Leaderboard</button>
             <button id="settingsBtn">Settings</button>
             <button id="chromeManagementBtn">Chrome Management</button>
+            <button id="profileBtn">Profile</button>
+            <button id="notificationsBtn">Notifications</button>
         </div>
         <div class="user-controls">
             <div class="user-info">
@@ -798,10 +769,18 @@
             let timeSpent = JSON.parse(localStorage.getItem('timeSpent')) || {};
             let aiChatHistory = JSON.parse(localStorage.getItem(`${user}_aiChatHistory`)) || [];
             let activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || {};
+            let notifications = JSON.parse(localStorage.getItem(`${user}_notifications`)) || [];
+            let userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || {};
+            let recentActivities = JSON.parse(localStorage.getItem('recentActivities')) || [];
+            let typingUsers = JSON.parse(localStorage.getItem('typingUsers')) || {};
             let currentChat = null;
             let currentChatType = null;
             if (!messageCount[user]) messageCount[user] = 0;
             if (!timeSpent[user]) timeSpent[user] = 0;
+            if (!userProfiles[user]) {
+                userProfiles[user] = { bio: '', avatar: '', status: 'online' };
+                localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+            }
             let startTime = Date.now();
             setInterval(() => {
                 const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -854,7 +833,7 @@
                 document.getElementById('closureModal').style.display = 'none';
             };
             document.getElementById('confirmCloseBtn').addEventListener('click', () => {
-                const secondaryConfirm = confirm('Final confirmation: Are you absolutely sure you want to close?');
+                const secondaryConfirm = confirm('Final confirmation: Are you sure you want to close?');
                 if (secondaryConfirm) {
                     closureConfirmed = true;
                     window.close();
@@ -874,8 +853,11 @@
                 localStorage.setItem('websitePermission', 'denied');
                 permissionModal.style.display = 'none';
             };
-            function notifyUser(toUser, message) {
-                if (toUser === user && localStorage.getItem('websitePermission') === 'granted' && Notification.permission === 'granted') {
+            function addNotification(message) {
+                const timestamp = Date.now();
+                notifications.push({ message, timestamp });
+                localStorage.setItem(`${user}_notifications`, JSON.stringify(notifications));
+                if (localStorage.getItem('websitePermission') === 'granted' && Notification.permission === 'granted') {
                     new Notification(message);
                 }
                 const notification = document.getElementById('notification');
@@ -884,6 +866,16 @@
                 setTimeout(() => {
                     notification.style.display = 'none';
                 }, 3000);
+            }
+            function notifyUser(toUser, message) {
+                if (toUser === user) {
+                    addNotification(message);
+                }
+            }
+            function addActivity(activity) {
+                recentActivities.push({ user, activity, timestamp: Date.now() });
+                if (recentActivities.length > 20) recentActivities.shift();
+                localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
             }
             function renderChat() {
                 const otherUsers = Object.keys(friends);
@@ -926,6 +918,16 @@
                     `;
                     liveUserList.appendChild(li);
                 });
+                const activityList = document.createElement('ul');
+                activityList.className = 'activity-list';
+                recentActivities.forEach(activity => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${activity.user} ${activity.activity}</span>
+                        <span class="timestamp">${new Date(activity.timestamp).toLocaleTimeString()}</span>
+                    `;
+                    activityList.appendChild(li);
+                });
                 const chatMessagesDiv = document.createElement('div');
                 chatMessagesDiv.className = 'chat-messages';
                 if (currentChat) {
@@ -955,10 +957,15 @@
                 } else {
                     chatMessagesDiv.innerHTML = '<p>Select a chat to start messaging.</p>';
                 }
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.id = 'typingIndicator';
                 fragment.appendChild(userList);
                 fragment.appendChild(groupList);
                 fragment.appendChild(liveUserList);
+                fragment.appendChild(activityList);
                 fragment.appendChild(chatMessagesDiv);
+                fragment.appendChild(typingIndicator);
                 content.innerHTML = `
                     <div class="section">
                         <h2>Chat</h2>
@@ -981,13 +988,17 @@
                                 <div class="live-users">
                                     <h3>Live Users</h3>
                                 </div>
+                                <div class="recent-activity">
+                                    <h3>Recent Activity</h3>
+                                </div>
                             </div>
                             <div class="chat-area">
                                 <div class="chat-box">
                                     <div class="chat-messages"></div>
+                                    <div class="typing-indicator" id="typingIndicator"></div>
                                     ${currentChat ? `
                                         <div class="chat-input">
-                                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()" oninput="handleTyping()">
                                             <button class="image-upload-btn" onclick="document.getElementById('imageUpload').click()">Image</button>
                                             <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="sendImage()">
                                             <button onclick="sendMessage()">Send</button>
@@ -1001,19 +1012,51 @@
                 content.querySelector('.chat-users').appendChild(userList);
                 content.querySelector('.chat-groups').appendChild(groupList);
                 content.querySelector('.live-users').appendChild(liveUserList);
+                content.querySelector('.recent-activity').appendChild(activityList);
                 content.querySelector('.chat-box').replaceChild(chatMessagesDiv, content.querySelector('.chat-messages'));
+                content.querySelector('.chat-box').replaceChild(typingIndicator, content.querySelector('#typingIndicator'));
                 if (chatMessagesDiv) {
                     chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
                 }
                 if (currentChat) {
                     markMessagesAsRead(currentChat, currentChatType);
                 }
+                updateTypingIndicator();
             }
+            window.handleTyping = function() {
+                if (currentChat) {
+                    typingUsers[user] = { chat: currentChat, type: currentChatType, timestamp: Date.now() };
+                    localStorage.setItem('typingUsers', JSON.stringify(typingUsers));
+                }
+            };
+            function updateTypingIndicator() {
+                if (currentChat) {
+                    const typingIndicator = document.getElementById('typingIndicator');
+                    const typingInChat = Object.keys(typingUsers).filter(u => 
+                        u !== user && 
+                        typingUsers[u].chat === currentChat && 
+                        typingUsers[u].type === currentChatType && 
+                        (Date.now() - typingUsers[u].timestamp) < 5000
+                    );
+                    if (typingInChat.length > 0) {
+                        typingIndicator.textContent = `${typingInChat.join(', ')} ${typingInChat.length > 1 ? 'are' : 'is'} typing...`;
+                        typingIndicator.style.display = 'block';
+                    } else {
+                        typingIndicator.style.display = 'none';
+                    }
+                }
+            }
+            setInterval(() => {
+                if (document.querySelector('.nav-links button.active').id === 'chatBtn') {
+                    updateTypingIndicator();
+                }
+            }, 1000);
             window.addFriend = function() {
                 const username = document.getElementById('addUserInput').value.trim();
                 if (username && username !== user && users.includes(username) && !friends[username]) {
                     friends[username] = username;
                     localStorage.setItem(`${user}_friends`, JSON.stringify(friends));
+                    addActivity(`added ${username} as a friend`);
                     renderChat();
                 } else {
                     alert('User not found or already added.');
@@ -1024,6 +1067,7 @@
                 if (newName && newName.trim()) {
                     friends[username] = newName.trim();
                     localStorage.setItem(`${user}_friends`, JSON.stringify(friends));
+                    addActivity(`renamed friend ${username} to ${newName.trim()}`);
                     renderChat();
                 }
             };
@@ -1032,6 +1076,7 @@
                 if (groupName && !groups[groupName]) {
                     groups[groupName] = { members: [user], messages: [] };
                     localStorage.setItem('groups', JSON.stringify(groups));
+                    addActivity(`created group ${groupName}`);
                     renderChat();
                 } else {
                     alert('Group name already exists or invalid.');
@@ -1040,11 +1085,18 @@
             window.selectChat = function(chatId, type) {
                 currentChat = chatId;
                 currentChatType = type;
+                addActivity(`opened chat with ${chatId} (${type})`);
                 renderChat();
             };
             window.sendMessage = function() {
                 const input = document.getElementById('chatInput');
-                const text = input.value.trim();
+                let text = input.value.trim();
+                if (user === 'realalex' && text.toLowerCase() === 'alex_code') {
+                    text = 'Executing owner-only command: Displaying secret message...';
+                    setTimeout(() => {
+                        alert('Secret Message: Welcome, Owner! You have unlocked the hidden feature.');
+                    }, 1000);
+                }
                 if (text && currentChat) {
                     const timestamp = Date.now();
                     if (currentChatType === 'dm') {
@@ -1062,7 +1114,10 @@
                     }
                     messageCount[user]++;
                     localStorage.setItem('messageCount', JSON.stringify(messageCount));
+                    addActivity(`sent a message in ${currentChat} (${currentChatType})`);
                     input.value = '';
+                    delete typingUsers[user];
+                    localStorage.setItem('typingUsers', JSON.stringify(typingUsers));
                     renderChat();
                 }
             };
@@ -1089,6 +1144,7 @@
                         }
                         messageCount[user]++;
                         localStorage.setItem('messageCount', JSON.stringify(messageCount));
+                        addActivity(`sent an image in ${currentChat} (${currentChatType})`);
                         fileInput.value = '';
                         renderChat();
                     };
@@ -1286,6 +1342,7 @@
                     aiMessages.scrollTop = aiMessages.scrollHeight;
                     input.value = '';
                     localStorage.setItem(`${user}_aiChatHistory`, JSON.stringify(aiChatHistory));
+                    addActivity('sent a message to AI Bot');
                     const isImageRequest = text.toLowerCase().includes('image') || text.toLowerCase().includes('picture') || imageData;
                     const isCodeRequest = text.toLowerCase().includes('code') || text.toLowerCase().includes('program');
                     try {
@@ -1430,6 +1487,10 @@
                 const extensionList = document.getElementById('extensionList');
                 if (typeof chrome !== 'undefined' && chrome.management) {
                     chrome.management.getAll(extensions => {
+                        if (chrome.runtime.lastError) {
+                            extensionList.innerHTML = '<p>Error accessing extensions: ' + chrome.runtime.lastError.message + '</p>';
+                            return;
+                        }
                         const ul = document.createElement('ul');
                         ul.className = 'extension-list';
                         extensions.forEach(ext => {
@@ -1453,12 +1514,16 @@
                         }
                     });
                 } else {
-                    extensionList.innerHTML = '<p>Chrome extension management is not available. Please ensure you are running this in a Chrome browser with appropriate permissions.</p>';
+                    extensionList.innerHTML = '<p>Chrome extension management is not available. Please run this as a Chrome extension with the "management" permission.</p>';
                 }
             }
             window.toggleExtension = function(id, isEnabled) {
                 if (chrome.management) {
                     chrome.management.setEnabled(id, !isEnabled, () => {
+                        if (chrome.runtime.lastError) {
+                            notifyUser(user, `Error: ${chrome.runtime.lastError.message}`);
+                            return;
+                        }
                         renderChromeManagement();
                         notifyUser(user, `Extension ${isEnabled ? 'disabled' : 'enabled'} successfully!`);
                     });
@@ -1469,16 +1534,76 @@
                     const confirmUninstall = confirm('Are you sure you want to uninstall this extension?');
                     if (confirmUninstall) {
                         chrome.management.uninstall(id, { showConfirmDialog: false }, () => {
+                            if (chrome.runtime.lastError) {
+                                notifyUser(user, `Error: ${chrome.runtime.lastError.message}`);
+                                return;
+                            }
                             renderChromeManagement();
                             notifyUser(user, 'Extension uninstalled successfully!');
                         });
                     }
                 }
             };
+            function renderProfile() {
+                const profile = userProfiles[user];
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Profile</h2>
+                        <div class="profile-section">
+                            <div class="profile-form">
+                                <label>Bio</label>
+                                <textarea id="bioInput" placeholder="Tell us about yourself">${profile.bio}</textarea>
+                                <label>Avatar URL</label>
+                                <input type="text" id="avatarInput" value="${profile.avatar}" placeholder="Enter avatar URL">
+                                <label>Status</label>
+                                <select id="statusInput">
+                                    <option value="online" ${profile.status === 'online' ? 'selected' : ''}>Online</option>
+                                    <option value="away" ${profile.status === 'away' ? 'selected' : ''}>Away</option>
+                                    <option value="offline" ${profile.status === 'offline' ? 'selected' : ''}>Offline</option>
+                                </select>
+                                <button class="save-btn" onclick="saveProfile()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            window.saveProfile = function() {
+                const bio = document.getElementById('bioInput').value;
+                const avatar = document.getElementById('avatarInput').value;
+                const status = document.getElementById('statusInput').value;
+                userProfiles[user] = { bio, avatar, status };
+                localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+                addActivity('updated their profile');
+                notifyUser(user, 'Profile updated successfully!');
+                renderProfile();
+            };
+            function renderNotifications() {
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Notifications</h2>
+                        <div class="notifications-section">
+                            <ul class="notification-list" id="notificationList"></ul>
+                        </div>
+                    </div>
+                `;
+                const notificationList = document.getElementById('notificationList');
+                notifications.forEach(note => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${note.message}</span>
+                        <span class="timestamp">${new Date(note.timestamp).toLocaleTimeString()}</span>
+                    `;
+                    notificationList.appendChild(li);
+                });
+                if (notifications.length === 0) {
+                    notificationList.innerHTML = '<p>No notifications yet.</p>';
+                }
+            }
             window.saveApiKey = function() {
                 const apiKey = document.getElementById('apiKeyInput').value.trim();
                 if (apiKey) {
                     localStorage.setItem('openai_api_key', apiKey);
+                    addActivity('updated OpenAI API key');
                     alert('API Key saved successfully!');
                 } else {
                     alert('Please enter a valid API key.');
@@ -1487,6 +1612,7 @@
             window.toggleKeepOpen = function() {
                 const keepOpen = localStorage.getItem('keepOpen') === 'true';
                 localStorage.setItem('keepOpen', !keepOpen);
+                addActivity(`${keepOpen ? 'disabled' : 'enabled'} Keep Open feature`);
                 renderSettings();
             };
             const navButtons = document.querySelectorAll('.nav-links button');
@@ -1502,6 +1628,10 @@
                         renderSettings();
                     } else if (btn.id === 'chromeManagementBtn') {
                         renderChromeManagement();
+                    } else if (btn.id === 'profileBtn') {
+                        renderProfile();
+                    } else if (btn.id === 'notificationsBtn') {
+                        renderNotifications();
                     }
                 });
             });
@@ -1538,6 +1668,11 @@
                     activeUsers = JSON.parse(localStorage.getItem('activeUsers')) || {};
                     if (document.querySelector('.nav-links button.active').id === 'chatBtn') {
                         renderChat();
+                    }
+                } else if (event.key === 'typingUsers') {
+                    typingUsers = JSON.parse(localStorage.getItem('typingUsers')) || {};
+                    if (document.querySelector('.nav-links button.active').id === 'chatBtn') {
+                        updateTypingIndicator();
                     }
                 }
             });
