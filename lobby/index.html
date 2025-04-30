@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chatting Hangout">
+    <title>Chatting Hangout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #2e2a47, #4a5e6d);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        body.light-mode {
+            background: linear-gradient(145deg, #f0f0f5, #d9e4e6);
+            color: #2e2a47;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .light-mode .navbar {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6b5b95, #88b7b5);
+            border-radius: 10px;
+            margin-right: 0.8rem;
+            position: relative;
+        }
+        .logo-icon::before {
+            content: 'C';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #2e2a47;
+        }
+        .navbar h1 {
+            font-size: 1.8rem;
+            color: #6b5b95;
+        }
+        .light-mode .navbar h1 {
+            color: #4a5e6d;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links button {
+            background: #6b5b95;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .nav-links button:hover {
+            background: #88b7b5;
+        }
+        .nav-links button.active {
+            background: #88b7b5;
+        }
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6b5b95, #88b7b5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #fff;
+        }
+        .admin-btn {
+            background: #88b7b5;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .admin-btn:hover {
+            background: #6b5b95;
+        }
+        .admin-dropdown {
+            position: relative;
+        }
+        .admin-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            z-index: 10;
+        }
+        .light-mode .admin-menu {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .admin-menu.active {
+            display: block;
+        }
+        .admin-menu button {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            text-align: left;
+            cursor: pointer;
+        }
+        .light-mode .admin-menu button {
+            color: #2e2a47;
+        }
+        .admin-menu button:hover {
+            background: rgba(107, 91, 149, 0.2);
+        }
+        .sign-out-btn {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .sign-out-btn:hover {
+            background: #ff6666;
+        }
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .theme-toggle input {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background: #4a5e6d;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+        }
+        .theme-toggle input:checked {
+            background: #6b5b95;
+        }
+        .theme-toggle input::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s ease;
+        }
+        .theme-toggle input:checked::before {
+            left: 22px;
+        }
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .light-mode .section {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .section h2 {
+            color: #6b5b95;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .light-mode .section h2 {
+            color: #4a5e6d;
+        }
+        .chat-users {
+            margin-bottom: 1rem;
+        }
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+        .user-list li {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .light-mode .user-list li {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .user-list li.active {
+            background: rgba(107, 91, 149, 0.2);
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 400px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .message {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        .message.sent {
+            background: rgba(107, 91, 149, 0.3);
+            margin-left: 20%;
+            text-align: right;
+        }
+        .message.received {
+            background: rgba(136, 183, 181, 0.3);
+            margin-right: 20%;
+        }
+        .message .username {
+            font-weight: 600;
+            color: #6b5b95;
+        }
+        .light-mode .message .username {
+            color: #4a5e6d;
+        }
+        .message .timestamp {
+            font-size: 0.7rem;
+            color: #b0b0b0;
+        }
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+        }
+        .light-mode .chat-input input {
+            background: rgba(0, 0, 0, 0.1);
+            color: #2e2a47;
+        }
+        .chat-input button {
+            background: #6b5b95;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background: #88b7b5;
+        }
+        .ai-response {
+            background: rgba(136, 183, 181, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+        }
+        .leaderboard-list li {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .light-mode .leaderboard-list li {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .user-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <h1>Chatting Hangout</h1>
+        </div>
+        <div class="nav-links">
+            <button id="chatBtn" class="active">Chat</button>
+            <button id="aiBotBtn">AI Bot</button>
+            <button id="settingsBtn">Settings</button>
+            <button id="leaderboardBtn">Leaderboard</button>
+        </div>
+        <div class="user-controls">
+            <div class="user-info">
+                <div class="user-avatar" id="userInitial"></div>
+                <span id="welcomeUser"></span>
+            </div>
+            <div class="admin-dropdown">
+                <button id="adminBtn" class="admin-btn" style="display: none;">Admin</button>
+                <div class="admin-menu" id="adminMenu">
+                    <button onclick="goToAdminPanel()">Admin Panel</button>
+                    <button onclick="viewStats()">View Stats</button>
+                </div>
+            </div>
+            <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+            <div class="theme-toggle">
+                <label>Light Mode</label>
+                <input type="checkbox" id="themeToggle">
+            </div>
+        </div>
+    </nav>
+    <div class="content" id="content"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('username');
+            const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+            if (!user) {
+                window.location.href = 'hangoutclub.site';
+                return;
+            }
+            if (bannedUsers.includes(user)) {
+                window.location.href = '/ban';
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (!users.includes(user)) {
+                users.push(user);
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            document.getElementById('welcomeUser').textContent = `Welcome, ${user}!`;
+            document.getElementById('userInitial').textContent = user.charAt(0).toUpperCase();
+            const adminBtn = document.getElementById('adminBtn');
+            const adminMenu = document.getElementById('adminMenu');
+            const admins = JSON.parse(localStorage.getItem('admins')) || [String.fromCharCode(114, 101, 97, 108, 97, 108, 101, 120)];
+            if (admins.includes(user)) {
+                adminBtn.style.display = 'inline-block';
+                adminBtn.addEventListener('click', () => {
+                    adminMenu.classList.toggle('active');
+                });
+            }
+            window.goToAdminPanel = () => {
+                window.location.href = '/admin';
+            };
+            window.viewStats = () => {
+                alert('User Stats: Under Development');
+            };
+            function signOut() {
+                localStorage.removeItem('username');
+                localStorage.removeItem('password');
+                users = users.filter(u => u !== user);
+                localStorage.setItem('users', JSON.stringify(users));
+                window.location.href = 'hangoutclub.site';
+            }
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggle').checked = true;
+            }
+            document.getElementById('themeToggle').addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.body.classList.remove('light-mode');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            let messages = JSON.parse(localStorage.getItem('messages')) || {};
+            let currentChatUser = null;
+            let messageCount = users.reduce((acc, u) => {
+                acc[u] = (messages[u] || []).length;
+                return acc;
+            }, {});
+            function renderChat() {
+                const otherUsers = users.filter(u => u !== user);
+                const fragment = document.createDocumentFragment();
+                const userList = document.createElement('ul');
+                userList.className = 'user-list';
+                otherUsers.forEach(u => {
+                    const li = document.createElement('li');
+                    li.className = currentChatUser === u ? 'active' : '';
+                    li.setAttribute('onclick', `selectChatUser('${u}')`);
+                    li.innerHTML = `
+                        <div class="user-avatar">${u.charAt(0).toUpperCase()}</div>
+                        ${u}
+                        ${messages[u] && messages[u].some(msg => msg.to === user && !msg.read) ? '<span style="color: #ff4d4d;">(New)</span>' : ''}
+                    `;
+                    userList.appendChild(li);
+                });
+                const chatMessagesDiv = document.createElement('div');
+                chatMessagesDiv.className = 'chat-messages';
+                if (currentChatUser) {
+                    (messages[currentChatUser] || []).forEach(msg => {
+                        const div = document.createElement('div');
+                        div.className = `message ${msg.from === user ? 'sent' : 'received'}`;
+                        div.innerHTML = `
+                            <p class="username">${msg.from}</p>
+                            <p>${msg.text}</p>
+                            <p class="timestamp">${new Date(msg.timestamp).toLocaleTimeString()}</p>
+                        `;
+                        chatMessagesDiv.appendChild(div);
+                    });
+                } else {
+                    chatMessagesDiv.innerHTML = '<p>Select a user to start chatting.</p>';
+                }
+                fragment.appendChild(userList);
+                fragment.appendChild(chatMessagesDiv);
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Chat</h2>
+                        <div class="chat-users"></div>
+                        <div class="chat-box">
+                            <div class="chat-messages"></div>
+                            ${currentChatUser ? `
+                                <div class="chat-input">
+                                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                                    <button onclick="sendMessage()">Send</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                content.querySelector('.chat-users').appendChild(userList);
+                content.querySelector('.chat-box').replaceChild(chatMessagesDiv, content.querySelector('.chat-messages'));
+                if (chatMessagesDiv) {
+                    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                }
+                if (currentChatUser) {
+                    markMessagesAsRead(currentChatUser);
+                }
+            }
+            window.selectChatUser = function(username) {
+                currentChatUser = username;
+                renderChat();
+            };
+            window.sendMessage = function() {
+                const input = document.getElementById('chatInput');
+                const text = input.value.trim();
+                if (text && currentChatUser) {
+                    if (!messages[currentChatUser]) {
+                        messages[currentChatUser] = [];
+                    }
+                    const timestamp = Date.now();
+                    messages[currentChatUser].push({ from: user, to: currentChatUser, text, read: false, timestamp });
+                    localStorage.setItem('messages', JSON.stringify(messages));
+                    messageCount[user] = (messageCount[user] || 0) + 1;
+                    input.value = '';
+                    renderChat();
+                }
+            };
+            function markMessagesAsRead(otherUser) {
+                if (messages[otherUser]) {
+                    messages[otherUser] = messages[otherUser].map(msg => {
+                        if (msg.to === user) {
+                            return { ...msg, read: true };
+                        }
+                        return msg;
+                    });
+                    localStorage.setItem('messages', JSON.stringify(messages));
+                }
+            }
+            function renderAIBot() {
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>AI Bot</h2>
+                        <div class="chat-box">
+                            <div class="chat-messages" id="aiMessages">
+                                <div class="message received">
+                                    <p class="username">AI Bot</p>
+                                    <p>Hello! How can I assist you today?</p>
+                                    <p class="timestamp">${new Date().toLocaleTimeString()}</p>
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="aiInput" placeholder="Ask the AI Bot..." onkeypress="if(event.key === 'Enter') sendToAIBot()">
+                                <button onclick="sendToAIBot()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            window.sendToAIBot = function() {
+                const input = document.getElementById('aiInput');
+                const text = input.value.trim();
+                if (text) {
+                    const aiMessages = document.getElementById('aiMessages');
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'message sent';
+                    userMessage.innerHTML = `
+                        <p class="username">${user}</p>
+                        <p>${text}</p>
+                        <p class="timestamp">${new Date().toLocaleTimeString()}</p>
+                    `;
+                    aiMessages.appendChild(userMessage);
+                    aiMessages.scrollTop = aiMessages.scrollHeight;
+                    setTimeout(() => {
+                        const responseMessage = document.createElement('div');
+                        responseMessage.className = 'message received ai-response';
+                        responseMessage.innerHTML = `
+                            <p class="username">AI Bot</p>
+                            <p>I hear you! You said: "${text}". How can I help you further?</p>
+                            <p class="timestamp">${new Date().toLocaleTimeString()}</p>
+                        `;
+                        aiMessages.appendChild(responseMessage);
+                        aiMessages.scrollTop = aiMessages.scrollHeight;
+                    }, 1000);
+                    input.value = '';
+                }
+            };
+            function renderSettings() {
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Settings</h2>
+                        <p>Manage your preferences here.</p>
+                        <p>Theme: Toggle light/dark mode in the navbar.</p>
+                    </div>
+                `;
+            }
+            function renderLeaderboard() {
+                const sortedUsers = users.sort((a, b) => (messageCount[b] || 0) - (messageCount[a] || 0));
+                const fragment = document.createDocumentFragment();
+                const leaderboardList = document.createElement('ul');
+                leaderboardList.className = 'leaderboard-list';
+                sortedUsers.forEach(u => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${u}</span>
+                        <span>${messageCount[u] || 0} messages</span>
+                    `;
+                    leaderboardList.appendChild(li);
+                });
+                fragment.appendChild(leaderboardList);
+                content.innerHTML = `
+                    <div class="section">
+                        <h2>Leaderboard</h2>
+                        <p>Top users by message count:</p>
+                    </div>
+                `;
+                content.querySelector('.section').appendChild(leaderboardList);
+            }
+            const navButtons = document.querySelectorAll('.nav-links button');
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (btn.id === 'chatBtn') {
+                        renderChat();
+                    } else if (btn.id === 'aiBotBtn') {
+                        renderAIBot();
+                    } else if (btn.id === 'settingsBtn') {
+                        renderSettings();
+                    } else if (btn.id === 'leaderboardBtn') {
+                        renderLeaderboard();
+                    }
+                });
+            });
+            renderChat();
+            let lastBannedCheck = 0;
+            const throttleDelay = 5000;
+            window.addEventListener('storage', (event) => {
+                const now = Date.now();
+                if (event.key === 'bannedUsers' && now - lastBannedCheck > throttleDelay) {
+                    lastBannedCheck = now;
+                    const updatedBannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+                    if (updatedBannedUsers.includes(user)) {
+                        window.location.href = '/ban';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
