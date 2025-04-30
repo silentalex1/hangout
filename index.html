@@ -20,6 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 1rem;
         }
         body.light-mode {
             background: linear-gradient(145deg, #f0f0f5, #d9e4e6);
@@ -41,7 +42,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         .logo-icon {
             width: 40px;
@@ -62,7 +63,7 @@
             color: #2e2a47;
         }
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #6b5b95;
             margin-bottom: 1.5rem;
         }
@@ -135,6 +136,17 @@
         .theme-toggle input:checked::before {
             left: 22px;
         }
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .login-form input, .login-form button {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -146,6 +158,7 @@
         <div class="login-form">
             <input type="text" id="username" placeholder="Username" aria-label="Username">
             <input type="password" id="password" placeholder="Password" aria-label="Password">
+            <input type="text" id="code" placeholder="Code" aria-label="Code">
             <button onclick="login()">Login</button>
         </div>
         <div class="theme-toggle">
@@ -170,23 +183,33 @@
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
+            const code = document.getElementById('code').value.trim();
             const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+            const storedCode = localStorage.getItem(`${username}_code`);
             if (bannedUsers.includes(username)) {
                 alert('You are banned from Chatting Hangout.');
                 return;
             }
-            if (username && password) {
+            if (username && password && code) {
+                if (storedCode && storedCode !== code) {
+                    alert('Invalid code. Please try again.');
+                    return;
+                }
                 localStorage.setItem('username', username);
                 localStorage.setItem('password', password);
+                localStorage.setItem(`${username}_code`, code);
                 window.location.href = '/lobby';
             } else {
-                alert('Please enter a username and password.');
+                alert('Please enter a username, password, and code.');
             }
         }
         document.getElementById('username').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') login();
         });
         document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+        document.getElementById('code').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') login();
         });
     </script>
