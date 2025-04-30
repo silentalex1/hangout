@@ -110,7 +110,7 @@
         .light-mode .user-list li {
             background: rgba(0, 0, 0, 0.05);
         }
-        .ban-btn, .change-password-btn, .change-code-btn {
+        .ban-btn, .change-password-btn, .change-code-btn, .promote-btn {
             background: #ff4d4d;
             color: #fff;
             border: none;
@@ -118,13 +118,42 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        .ban-btn:hover, .change-password-btn:hover, .change-code-btn:hover {
+        .ban-btn:hover, .change-password-btn:hover, .change-code-btn:hover, .promote-btn:hover {
             background: #ff6666;
         }
-        .change-password-btn, .change-code-btn {
+        .change-password-btn, .change-code-btn, .promote-btn {
             background: #6b5b95;
         }
-        .change-password-btn:hover, .change-code-btn:hover {
+        .change-password-btn:hover, .change-code-btn:hover, .promote-btn:hover {
+            background: #88b7b5;
+        }
+        .global-code-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .global-code-form input {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1rem;
+            outline: none;
+        }
+        .light-mode .global-code-form input {
+            background: rgba(0, 0, 0, 0.1);
+            color: #2e2a47;
+        }
+        .global-code-form button {
+            background: #6b5b95;
+            color: #fff;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .global-code-form button:hover {
             background: #88b7b5;
         }
         @media (max-width: 768px) {
@@ -137,6 +166,9 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .global-code-form {
+                flex-direction: column;
+            }
         }
         @media (max-width: 480px) {
             header h1 {
@@ -145,7 +177,7 @@
             .section h2 {
                 font-size: 1.5rem;
             }
-            .ban-btn, .change-password-btn, .change-code-btn {
+            .ban-btn, .change-password-btn, .change-code-btn, .promote-btn {
                 font-size: 0.9rem;
                 padding: 0.3rem 0.6rem;
             }
@@ -162,6 +194,13 @@
             <button class="back-btn" onclick="window.location.href='/lobby'">Back to Lobby</button>
         </header>
         <div class="section">
+            <h2>Manage Website Code</h2>
+            <div class="global-code-form">
+                <input type="text" id="globalCodeInput" placeholder="Set global website code">
+                <button onclick="setGlobalCode()">Set Code</button>
+            </div>
+        </div>
+        <div class="section">
             <h2>Manage Users</h2>
             <ul class="user-list" id="userList"></ul>
         </div>
@@ -170,7 +209,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('username');
             const admins = JSON.parse(localStorage.getItem('admins')) || [];
-            if (!user || !admins.includes(user)) {
+            const mods = JSON.parse(localStorage.getItem('mods')) || [];
+            if (!user || (!admins.includes(user) && !mods.includes(user))) {
                 window.location.href = '/lobby';
                 return;
             }
@@ -181,14 +221,15 @@
                 userList.innerHTML = '';
                 const fragment = document.createDocumentFragment();
                 users.forEach(u => {
-                    if (u === user) return;
+                    if (u === user || u === 'realalex') return;
                     const li = document.createElement('li');
                     li.innerHTML = `
-                        <span>${u}</span>
+                        <span>${u}${admins.includes(u) ? ' (Admin)' : mods.includes(u) ? ' (Mod)' : ''}</span>
                         <div>
                             <button class="ban-btn" onclick="banUser('${u}')">${bannedUsers.includes(u) ? 'Unban' : 'Ban'}</button>
                             <button class="change-password-btn" onclick="changePassword('${u}')">Change Password</button>
                             <button class="change-code-btn" onclick="changeCode('${u}')">Change Code</button>
+                            <button class="promote-btn" onclick="promoteUser('${u}')">${mods.includes(u) ? 'Demote' : 'Promote to Mod'}</button>
                         </div>
                     `;
                     fragment.appendChild(li);
@@ -218,10 +259,37 @@
                     alert(`Code for ${username} updated successfully!`);
                 }
             };
+            window.promoteUser = function(username) {
+                if (mods.includes(username)) {
+                    mods.splice(mods.indexOf(username), 1);
+                } else {
+                    mods.push(username);
+                }
+                localStorage.setItem('mods', JSON.stringify(mods));
+                renderUsers();
+            };
+            window.setGlobalCode = function() {
+                const globalCode = document.getElementById('globalCodeInput').value.trim();
+                if (globalCode) {
+                    localStorage.setItem('globalWebsiteCode', globalCode);
+                    alert('Global website code updated successfully!');
+                } else {
+                    localStorage.removeItem('globalWebsiteCode');
+                    alert('Global website code removed!');
+                }
+            };
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
             }
             renderUsers();
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'users' || event.key === 'bannedUsers' || event.key === 'mods') {
+                    users = JSON.parse(localStorage.getItem('users')) || [];
+                    bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+                    mods = JSON.parse(localStorage.getItem('mods')) || [];
+                    renderUsers();
+                }
+            });
         });
     </script>
 </body>
