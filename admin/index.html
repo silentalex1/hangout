@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chatting Hangout Admin Panel">
+    <title>Chatting Hangout - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #2e2a47, #4a5e6d);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        body.light-mode {
+            background: linear-gradient(145deg, #f0f0f5, #d9e4e6);
+            color: #2e2a47;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6b5b95, #88b7b5);
+            border-radius: 10px;
+            margin-right: 0.8rem;
+            position: relative;
+        }
+        .logo-icon::before {
+            content: 'C';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #2e2a47;
+        }
+        header h1 {
+            font-size: 2rem;
+            color: #6b5b95;
+        }
+        .light-mode header h1 {
+            color: #4a5e6d;
+        }
+        .back-btn {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background: #ff6666;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .light-mode .section {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .section h2 {
+            color: #6b5b95;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .light-mode .section h2 {
+            color: #4a5e6d;
+        }
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+        .user-list li {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .light-mode .user-list li {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .ban-btn {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .ban-btn:hover {
+            background: #ff6666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>Admin Panel</h1>
+            </div>
+            <button class="back-btn" onclick="window.location.href='/lobby'">Back to Lobby</button>
+        </header>
+        <div class="section">
+            <h2>Manage Users</h2>
+            <ul class="user-list" id="userList"></ul>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('username');
+            const admins = JSON.parse(localStorage.getItem('admins')) || [String.fromCharCode(114, 101, 97, 108, 97, 108, 101, 120)];
+            if (!user || !admins.includes(user)) {
+                window.location.href = '/lobby';
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+            function renderUsers() {
+                const userList = document.getElementById('userList');
+                userList.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                users.forEach(u => {
+                    if (u === user) return;
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${u}</span>
+                        <button class="ban-btn" onclick="banUser('${u}')">${bannedUsers.includes(u) ? 'Unban' : 'Ban'}</button>
+                    `;
+                    fragment.appendChild(li);
+                });
+                userList.appendChild(fragment);
+            }
+            window.banUser = function(username) {
+                if (bannedUsers.includes(username)) {
+                    bannedUsers = bannedUsers.filter(u => u !== username);
+                } else {
+                    bannedUsers.push(username);
+                }
+                localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
+                renderUsers();
+            };
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+            }
+            renderUsers();
+        });
+    </script>
+</body>
+</html>
