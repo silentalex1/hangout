@@ -19,6 +19,7 @@
             color: #e0e0e0;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background 0.3s ease;
         }
         body.light-mode {
             background: linear-gradient(145deg, #f0f0f5, #d9e4e6);
@@ -36,6 +37,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: background 0.3s ease;
         }
         .light-mode .navbar {
             background: rgba(0, 0, 0, 0.05);
@@ -51,6 +53,10 @@
             border-radius: 10px;
             margin-right: 0.8rem;
             position: relative;
+            transition: transform 0.2s ease;
+        }
+        .logo-icon:hover {
+            transform: scale(1.05);
         }
         .logo-icon::before {
             content: 'C';
@@ -182,6 +188,7 @@
             padding: 1rem;
             max-width: 1200px;
             margin: 0 auto;
+            transition: opacity 0.3s ease;
         }
         .section {
             background: rgba(255, 255, 255, 0.05);
@@ -189,7 +196,7 @@
             border-radius: 15px;
             margin-bottom: 1rem;
             backdrop-filter: blur(5px);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, opacity 0.3s ease;
         }
         .section:hover {
             transform: translateY(-3px);
@@ -254,16 +261,16 @@
             content: '⚪';
             margin-left: 0.5rem;
         }
-        .rename-btn, .disable-btn, .uninstall-btn, .edit-btn, .save-btn {
+        .rename-btn, .disable-btn, .uninstall-btn, .edit-btn, .save-btn, .continue-btn {
             background: #88b7b5;
             border: none;
             padding: 0.3rem 0.6rem;
             border-radius: 5px;
             cursor: pointer;
             color: #fff;
-            transition: background 0.2s ease, transform 0.1s ease;
+            transition: background 0.2s ease, transform 0.1s ease, opacity 0.3s ease;
         }
-        .rename-btn:hover, .disable-btn:hover, .uninstall-btn:hover, .edit-btn:hover, .save-btn:hover {
+        .rename-btn:hover, .disable-btn:hover, .uninstall-btn:hover, .edit-btn:hover, .save-btn:hover, .continue-btn:hover {
             background: #6b5b95;
             transform: scale(1.05);
         }
@@ -272,6 +279,15 @@
         }
         .disable-btn.enabled:hover {
             background: #ff6666;
+        }
+        .continue-btn {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .chat-box {
             display: flex;
@@ -285,7 +301,8 @@
             padding: 1rem;
             border-radius: 8px;
             background: rgba(0, 0, 0, 0.2);
-            scroll-behavior: smooth;
+            scrollbehavior: smooth;
+            transition: all 0.3s ease;
         }
         .message {
             margin-bottom: 0.5rem;
@@ -294,6 +311,7 @@
             word-break: break-word;
             position: relative;
             animation: slideIn 0.3s ease;
+            transition: all 0.3s ease;
         }
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-20px); }
@@ -415,14 +433,15 @@
             padding: 1rem;
             border-radius: 8px;
             margin-top: 0.5rem;
+            animation: smoothFadeIn 0.5s ease;
+        }
+        @keyframes smoothFadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .ai-message-content {
             opacity: 0;
-            animation: fadeIn 0.5s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: smoothFadeIn 0.5s ease forwards;
         }
         .ai-code-block-container {
             position: relative;
@@ -430,6 +449,7 @@
             border-radius: 8px;
             overflow: hidden;
             background: #1e1e2f;
+            max-height: none;
         }
         .light-mode .ai-code-block-container {
             background: #f5f5f5;
@@ -443,6 +463,7 @@
             white-space: pre-wrap;
             overflow-x: auto;
             margin: 0;
+            max-height: none;
         }
         .light-mode .ai-code-block {
             background: #f5f5f5;
@@ -541,7 +562,7 @@
         }
         .notification {
             position: fixed;
-            top: 20px;
+            top: 70px;
             right: 20px;
             background: #6b5b95;
             color: #fff;
@@ -550,13 +571,11 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             display: none;
             z-index: 1000;
-            animation: fadeInOut 3s ease;
+            animation: slideDown 0.5s ease forwards;
         }
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-10px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .permission-modal, .closure-modal {
             position: fixed;
@@ -629,6 +648,12 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+        .loading {
+            font-size: 0.9rem;
+            color: #88b7b5;
+            padding: 0.5rem;
+            animation: fadeIn 0.3s ease;
+        }
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -667,7 +692,7 @@
     </style>
 </head>
 <body>
-    <div class="permission-modal" id="permissionModal">
+    <div class="permission-modal" id="permissionModal" style="display: none;">
         <div class="modal-content">
             <h2>Full Permission of Website Use for More Features</h2>
             <p>Do you allow this website to fully have access so that you'll use our website features?</p>
@@ -715,6 +740,15 @@
     <div class="content" id="content"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script>
+        window.grantPermission = function() {
+            localStorage.setItem('websitePermission', 'granted');
+            document.getElementById('permissionModal').style.display = 'none';
+            Notification.requestPermission();
+        };
+        window.declinePermission = function() {
+            localStorage.setItem('websitePermission', 'denied');
+            document.getElementById('permissionModal').style.display = 'none';
+        };
         document.addEventListener('DOMContentLoaded', () => {
             const user = localStorage.getItem('username');
             const bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
@@ -736,7 +770,7 @@
             const adminNavBtn = document.getElementById('adminNavBtn');
             const admins = JSON.parse(localStorage.getItem('admins')) || [];
             const mods = JSON.parse(localStorage.getItem('mods')) || [];
-            if (admins.includes(user) || mods.includes(user)) {
+            if (user === 'realalex' || admins.includes(user) || mods.includes(user)) {
                 adminNavBtn.style.display = 'inline-block';
                 adminNavBtn.addEventListener('click', () => {
                     window.location.href = '/admin';
@@ -844,15 +878,6 @@
             if (!websitePermission) {
                 permissionModal.style.display = 'flex';
             }
-            window.grantPermission = function() {
-                localStorage.setItem('websitePermission', 'granted');
-                permissionModal.style.display = 'none';
-                Notification.requestPermission();
-            };
-            window.declinePermission = function() {
-                localStorage.setItem('websitePermission', 'denied');
-                permissionModal.style.display = 'none';
-            };
             function addNotification(message) {
                 const timestamp = Date.now();
                 notifications.push({ message, timestamp });
@@ -877,6 +902,25 @@
                 if (recentActivities.length > 20) recentActivities.shift();
                 localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
             }
+            function cleanupOldData() {
+                Object.keys(messages).forEach(chat => {
+                    if (messages[chat].length > 100) {
+                        messages[chat] = messages[chat].slice(-100);
+                    }
+                });
+                localStorage.setItem('messages', JSON.stringify(messages));
+                Object.keys(groups).forEach(group => {
+                    if (groups[group].messages.length > 100) {
+                        groups[group].messages = groups[group].messages.slice(-100);
+                    }
+                });
+                localStorage.setItem('groups', JSON.stringify(groups));
+                if (aiChatHistory.length > 50) {
+                    aiChatHistory = aiChatHistory.slice(-50);
+                    localStorage.setItem(`${user}_aiChatHistory`, JSON.stringify(aiChatHistory));
+                }
+            }
+            setInterval(cleanupOldData, 60000);
             function renderChat() {
                 const otherUsers = Object.keys(friends);
                 const fragment = document.createDocumentFragment();
@@ -932,7 +976,10 @@
                 chatMessagesDiv.className = 'chat-messages';
                 if (currentChat) {
                     const chatData = currentChatType === 'dm' ? messages[currentChat] || [] : groups[currentChat]?.messages || [];
-                    chatData.forEach(msg => {
+                    const messageLimit = 50;
+                    const startIndex = Math.max(0, chatData.length - messageLimit);
+                    const visibleMessages = chatData.slice(startIndex);
+                    visibleMessages.forEach(msg => {
                         const div = document.createElement('div');
                         div.className = `message ${msg.from === user ? 'sent' : 'received'}`;
                         if (msg.image) {
@@ -1237,7 +1284,10 @@
                     </div>
                 `;
                 const aiMessages = document.getElementById('aiMessages');
-                aiChatHistory.forEach(msg => {
+                const messageLimit = 30;
+                const startIndex = Math.max(0, aiChatHistory.length - messageLimit);
+                const visibleMessages = aiChatHistory.slice(startIndex);
+                visibleMessages.forEach(msg => {
                     const div = document.createElement('div');
                     div.className = `message ${msg.role === 'user' ? 'sent' : 'received ai-response'}`;
                     if (msg.role === 'assistant' && msg.isCode) {
@@ -1343,10 +1393,15 @@
                     input.value = '';
                     localStorage.setItem(`${user}_aiChatHistory`, JSON.stringify(aiChatHistory));
                     addActivity('sent a message to AI Bot');
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.className = 'message received loading';
+                    loadingDiv.textContent = 'AI is responding...';
+                    aiMessages.appendChild(loadingDiv);
+                    aiMessages.scrollTop = aiMessages.scrollHeight;
                     const isImageRequest = text.toLowerCase().includes('image') || text.toLowerCase().includes('picture') || imageData;
                     const isCodeRequest = text.toLowerCase().includes('code') || text.toLowerCase().includes('program');
                     try {
-                        const recentHistory = aiChatHistory.slice(-5);
+                        const recentHistory = aiChatHistory.slice(-3);
                         const messagesToSend = recentHistory.map(msg => ({
                             role: msg.role,
                             content: (msg.content || '').substring(0, 500) + (msg.image ? `\n[Image Data: ${msg.image.substring(0, 100)}...]` : '')
@@ -1360,12 +1415,12 @@
                             body: JSON.stringify({
                                 model: 'gpt-4',
                                 messages: messagesToSend,
-                                max_tokens: 300
                             }),
                             priority: 'high'
                         });
-                        const data = await response.json();
+                        aiMessages.removeChild(loadingDiv);
                         if (response.ok) {
+                            const data = await response.json();
                             const aiResponse = data.choices[0].message.content;
                             const aiMessage = { role: 'assistant', content: aiResponse, timestamp: Date.now() };
                             if (isCodeRequest) {
@@ -1433,6 +1488,7 @@
                             throw new Error(data.error.message);
                         }
                     } catch (error) {
+                        aiMessages.removeChild(loadingDiv);
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'message received ai-response';
                         errorDiv.innerHTML = `
@@ -1440,9 +1496,11 @@
                             <div class="ai-message-content">
                                 <p>Error: ${error.message || 'Failed to connect to OpenAI API.'}</p>
                                 <p class="timestamp">${new Date().toLocaleTimeString()}</p>
+                                <button class="continue-btn" onclick="sendToAIBot('${imageData}')">Continue</button>
                             </div>
                         `;
                         aiMessages.appendChild(errorDiv);
+                        errorDiv.querySelector('.continue-btn').style.display = 'block';
                         aiMessages.scrollTop = aiMessages.scrollHeight;
                     }
                 }
@@ -1472,10 +1530,17 @@
                             <input type="text" id="apiKeyInput" value="${apiKey}" placeholder="Enter your OpenAI API key">
                             <button onclick="saveApiKey()">Save</button>
                             <button class="keep-open-btn" onclick="toggleKeepOpen()">${keepOpen ? 'Disable Keep Open' : 'Enable Keep Open'}</button>
+                            <button onclick="clearStorage()">Clear Storage</button>
                         </div>
                     </div>
                 `;
             }
+            window.clearStorage = function() {
+                if (confirm('Are you sure you want to clear all storage? This will reset chats and settings.')) {
+                    localStorage.clear();
+                    window.location.href = '/';
+                }
+            };
             function renderChromeManagement() {
                 content.innerHTML = `
                     <div class="section">
@@ -1638,6 +1703,15 @@
             renderChat();
             let lastBannedCheck = 0;
             const throttleDelay = 5000;
+            const debounceStorageUpdate = (key, callback) => {
+                let timeout;
+                return () => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        callback();
+                    }, 300);
+                };
+            };
             window.addEventListener('storage', (event) => {
                 const now = Date.now();
                 if (event.key === 'bannedUsers' && now - lastBannedCheck > throttleDelay) {
@@ -1648,7 +1722,9 @@
                     }
                 } else if (event.key === 'users') {
                     users = JSON.parse(localStorage.getItem('users')) || [];
-                    renderChat();
+                    if (document.querySelector('.nav-links button.active').id === 'chatBtn') {
+                        renderChat();
+                    }
                     if (document.querySelector('.nav-links button.active').id === 'aiBotBtn') {
                         updateLeaderboard();
                     }
